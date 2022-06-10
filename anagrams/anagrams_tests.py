@@ -1,5 +1,6 @@
 import unittest
 import anagrams
+from Word import Word
 
 
 class MyTestCase(unittest.TestCase):
@@ -21,6 +22,26 @@ class MyTestCase(unittest.TestCase):
         assert word_as_dict.get('d') == 1
         assert word_as_dict.get('o') == 2
         assert word_as_dict.get('g') == 2
+
+    def test_default_dict_alternative(self):
+        word = 'doggo'
+        word_as_dict = anagrams.convert_word_to_defaultdict(word)
+        assert word_as_dict.get('d') == 1
+        assert word_as_dict.get('o') == 2
+        assert word_as_dict.get('g') == 2
+
+
+    def test_word_list(self):
+        word_list = [Word("cat"), Word("doggo")]
+        anagrams.add_dicts(word_list)
+        assert word_list[0].characters_dict['c'] == 1
+        assert word_list[0].characters_dict['a'] == 1
+        assert word_list[0].characters_dict['t'] == 1
+
+        assert word_list[1].characters_dict['d'] == 1
+        assert word_list[1].characters_dict['o'] == 2
+        assert word_list[1].characters_dict['g'] == 2
+
 
 if __name__ == '__main__':
     unittest.main()
