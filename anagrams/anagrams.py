@@ -1,9 +1,6 @@
-from typing import List, Dict, DefaultDict
-from collections import defaultdict
-import hashlib
-import json
+from typing import List, Dict
 
-from Word import Word
+from word import Word
 
 
 def load_words() -> List[Word]:
@@ -15,61 +12,28 @@ def load_words() -> List[Word]:
         return words
 
 
-# this function can be made obsolete by using the defaultdict implementation
-def add_character_to_dict(letter: chr, letter_dict: Dict[chr, int]):
-    if letter in letter_dict:
-        letter_dict[letter] += 1
-    else:
-        letter_dict[letter] = 1
-
-
-def convert_word_to_dict(word: str) -> Dict[chr, int]:
-    char_dict = {}
-    for character in word.lower():
-        add_character_to_dict(character, char_dict)
-    return char_dict
-
-
-def convert_word_to_defaultdict(word: str) -> DefaultDict:
-    char_dict = defaultdict(int)
-    for character in word:
-        char_dict[character] += 1
-    return char_dict
-
-
-def add_dicts(words: List[Word]):
+def cluster_words_into_anagrams(words: List[Word]) -> Dict[str, List[str]]:
+    word_cluster = {}
     for word in words:
-        word.characters_dict = convert_word_to_dict(word.word)
-
-
-def calculate_dict_hash(word: Word):
-    dhash = hashlib.md5()
-    # We need to sort arguments so {'a': 1, 'b': 2} is
-    # the same as {'b': 2, 'a': 1}
-    encoded = json.dumps(word.characters_dict, sort_keys=True).encode()
-    dhash.update(encoded)
-    return dhash.hexdigest()
-
-
-def add_hashes(words: List[Word]):
-    for word in words:
-        word.dict_hash = calculate_dict_hash(word)
-
-
-def get_all_anagrams(words: List[Word]) -> List[List[Word]]:
-    hash_dict = {}
-    for word in words:
-        if word.dict_hash in hash_dict:
-            hash_dict[word.dict_hash].append(word)
+        if word.hash in word_cluster:
+            word_cluster[word.hash].append(word.string)
         else:
-            hash_dict[word.dict_hash] = [word]
-    for key in hash_dict:
-        if len(hash_dict[key]) > 2:
-            print(hash_dict[key])
+            word_cluster[word.hash] = [word.string]
+    return word_cluster
+
+
+def filter_non_anagrams(word_cluster: Dict[str, List[str]]):
+    for key in list(word_cluster):
+        if len(word_cluster[key]) == 1:
+            del word_cluster[key]
+
+
+def get_words_from_cluster(word_cluster: Dict[str, List[str]]):
+    return word_cluster.values()
 
 
 if __name__ == "__main__":
     list_of_words = load_words()
-    add_dicts(list_of_words)
-    add_hashes(list_of_words)
-    get_all_anagrams(list_of_words)
+    cluster = cluster_words_into_anagrams(list_of_words)
+    filter_non_anagrams(cluster)
+    print(get_words_from_cluster(cluster))

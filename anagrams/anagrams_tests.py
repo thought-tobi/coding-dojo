@@ -1,64 +1,28 @@
 import unittest
-import anagrams
-from Word import Word
+
+from word import Word
 
 
 class MyTestCase(unittest.TestCase):
 
-    def test_add_character_to_dict(self):
-        empty_dict = {}
-        anagrams.add_character_to_dict('A', empty_dict)
-        assert empty_dict.get('A') == 1
+    def test_init_word(self):
+        word = Word('cat')
+        assert len(word.char_dict) == 3
+        assert word.char_dict['c'] == 1
+        assert word.char_dict['a'] == 1
+        assert word.char_dict['t'] == 1
 
-    def test_add_character_to_non_empty_dict(self):
-        non_empty_dict = {'A': 1, 'B': 3}
-        anagrams.add_character_to_dict('B', non_empty_dict)
-        assert non_empty_dict.get('A') == 1
-        assert non_empty_dict.get('B') == 4
+    def test_compare_unequal_words(self):
+        cat = Word('cat')
+        doggo = Word('doggo')
 
-    def test_convert_word_to_dict(self):
-        word = 'doggo'
-        word_as_dict = anagrams.convert_word_to_dict(word)
-        assert word_as_dict.get('d') == 1
-        assert word_as_dict.get('o') == 2
-        assert word_as_dict.get('g') == 2
+        assert cat.hash != doggo.hash
 
-    def test_default_dict_alternative(self):
-        word = 'doggo'
-        word_as_dict = anagrams.convert_word_to_defaultdict(word)
-        assert word_as_dict.get('d') == 1
-        assert word_as_dict.get('o') == 2
-        assert word_as_dict.get('g') == 2
+    def test_compare_anagrams(self):
+        kinship = Word('kinship')
+        pinkish = Word('pinkish')
 
-
-    def test_word_list(self):
-        word_list = [Word("cat"), Word("doggo")]
-        anagrams.add_dicts(word_list)
-        assert word_list[0].characters_dict['c'] == 1
-        assert word_list[0].characters_dict['a'] == 1
-        assert word_list[0].characters_dict['t'] == 1
-
-        assert word_list[1].characters_dict['d'] == 1
-        assert word_list[1].characters_dict['o'] == 2
-        assert word_list[1].characters_dict['g'] == 2
-
-
-    def test_calculate_dict_hash_equality(self):
-        word_list = [Word("cat"), Word("doggo"), Word("tac")]
-        anagrams.add_dicts(word_list)
-        anagrams.add_hashes(word_list)
-
-        assert word_list[0].dict_hash != word_list[1].dict_hash
-        assert word_list[0].dict_hash == word_list[2].dict_hash
-
-
-    def test_get_all_anagrams(self):
-        word_list = [Word("cat"), Word("doggo"), Word("tac")]
-        anagrams.add_dicts(word_list)
-        anagrams.add_hashes(word_list)
-
-
-
+        assert kinship.hash == pinkish.hash
 
 
 if __name__ == '__main__':
