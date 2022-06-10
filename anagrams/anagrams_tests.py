@@ -43,5 +43,23 @@ class MyTestCase(unittest.TestCase):
         assert word_list[1].characters_dict['g'] == 2
 
 
+    def test_calculate_dict_hash_equality(self):
+        word_list = [Word("cat"), Word("doggo"), Word("tac")]
+        anagrams.add_dicts(word_list)
+        anagrams.add_hashes(word_list)
+
+        assert word_list[0].dict_hash != word_list[1].dict_hash
+        assert word_list[0].dict_hash == word_list[2].dict_hash
+
+
+    def test_get_all_anagrams(self):
+        word_list = [Word("cat"), Word("doggo"), Word("tac")]
+        anagrams.add_dicts(word_list)
+        anagrams.add_hashes(word_list)
+
+
+
+
+
 if __name__ == '__main__':
     unittest.main()
