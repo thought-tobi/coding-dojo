@@ -34,12 +34,13 @@ def print_anagrams(word_cluster: Dict[List[chr], List[str]]):
         print(value)
 
 
-if __name__ == "__main__":
+def main():
     start = datetime.datetime.now()
     list_of_words = load_words()
     read_file_time = datetime.datetime.now()
 
     anagram_cluster = cluster_words_into_anagrams(list_of_words)
+
     filter_non_anagrams(anagram_cluster)
 
     print_anagrams(anagram_cluster)
@@ -47,3 +48,7 @@ if __name__ == "__main__":
 
     print(f"Read wordlist in {(read_file_time - start).total_seconds() * 1000}ms")
     print(f"Ran in {(end - start).total_seconds() * 1000}ms")
+
+
+if __name__ == "__main__":
+    main()
