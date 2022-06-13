@@ -14,13 +14,13 @@ def load_words() -> List[Word]:
 
 
 def cluster_words_into_anagrams(words: List[Word]) -> Dict[List[chr], List[str]]:
-    anagram_cluster = {}
+    anagrams = {}
     for word in words:
-        if word.characters in anagram_cluster:
-            anagram_cluster[word.characters].append(word.string)
+        if word.characters in anagrams:
+            anagrams[word.characters].append(word.string)
         else:
-            anagram_cluster[word.characters] = [word.string]
-    return anagram_cluster
+            anagrams[word.characters] = [word.string]
+    return anagrams
 
 
 def filter_non_anagrams(word_cluster: Dict[List[chr], List[str]]):
@@ -32,7 +32,6 @@ def filter_non_anagrams(word_cluster: Dict[List[chr], List[str]]):
 def print_anagrams(word_cluster: Dict[List[chr], List[str]]):
     for value in word_cluster.values():
         print(value)
-    print(len(anagram_cluster.values()))
 
 
 if __name__ == "__main__":
