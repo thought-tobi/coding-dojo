@@ -1,3 +1,4 @@
+import datetime
 from typing import List, Dict
 
 from word import Word
@@ -12,28 +13,38 @@ def load_words() -> List[Word]:
         return words
 
 
-def cluster_words_into_anagrams(words: List[Word]) -> Dict[str, List[str]]:
-    word_cluster = {}
+def cluster_words_into_anagrams(words: List[Word]) -> Dict[List[chr], List[str]]:
+    anagram_cluster = {}
     for word in words:
-        if word.hash in word_cluster:
-            word_cluster[word.hash].append(word.string)
+        if word.characters in anagram_cluster:
+            anagram_cluster[word.characters].append(word.string)
         else:
-            word_cluster[word.hash] = [word.string]
-    return word_cluster
+            anagram_cluster[word.characters] = [word.string]
+    return anagram_cluster
 
 
-def filter_non_anagrams(word_cluster: Dict[str, List[str]]):
+def filter_non_anagrams(word_cluster: Dict[List[chr], List[str]]):
     for key in list(word_cluster):
         if len(word_cluster[key]) == 1:
             del word_cluster[key]
 
 
-def get_words_from_cluster(word_cluster: Dict[str, List[str]]):
-    return word_cluster.values()
+def print_anagrams(word_cluster: Dict[List[chr], List[str]]):
+    for value in word_cluster.values():
+        print(value)
+    print(len(anagram_cluster.values()))
 
 
 if __name__ == "__main__":
+    start = datetime.datetime.now()
     list_of_words = load_words()
-    cluster = cluster_words_into_anagrams(list_of_words)
-    filter_non_anagrams(cluster)
-    print(get_words_from_cluster(cluster))
+    read_file_time = datetime.datetime.now()
+
+    anagram_cluster = cluster_words_into_anagrams(list_of_words)
+    filter_non_anagrams(anagram_cluster)
+
+    print_anagrams(anagram_cluster)
+    end = datetime.datetime.now()
+
+    print(f"Read wordlist in {(read_file_time - start).total_seconds() * 1000}ms")
+    print(f"Ran in {(end - start).total_seconds() * 1000}ms")
